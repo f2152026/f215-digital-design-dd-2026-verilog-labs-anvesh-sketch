@@ -5,7 +5,7 @@
 // from here on, not a special add-on.
 //
 // Part (a): add a CONSTANT delay to every gate below, e.g.:
-//   xor #(2) (ps, a, b);
+//  // xor #(2) (ps, a, b);
 // Do this for all five gates, then complete ripple_adder.v (this folder)
 // using this full adder, and simulate against tb.v.
 //
@@ -17,6 +17,10 @@
 // gates are rarely symmetric this way. Re-simulate with the SAME
 // ripple_adder.v and tb.v; nothing else needs to change.
 
+// Gate-level model of a 1-bit full adder, with rise/fall gate delay pairs.
+
+`timescale 1ns/1ps
+
 module FA_Gate(
   input  a,
   input  b,
@@ -26,10 +30,10 @@ module FA_Gate(
 );
   wire ps, pc1, pc2;
 
-  xor (ps,  a,   b);
-  and (pc1, a,   b);
-  xor (sum, cin, ps);
-  and (pc2, cin, ps);
-  or  (cout, pc1, pc2);
+  xor #(2,3) (ps,   a,   b);
+  and #(2,3) (pc1,  a,   b);
+  xor #(2,3) (sum,  cin, ps);
+  and #(2,3) (pc2,  cin, ps);
+  or  #(2,3) (cout, pc1, pc2);
 
 endmodule
