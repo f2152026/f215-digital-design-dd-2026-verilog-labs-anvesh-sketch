@@ -16,13 +16,19 @@ module lut #(
 
   integer i;
 
-  // TODO: initialize mem[i] = i*i for every i from 0 to DEPTH-1.
-  // Use an initial block with a for loop -- this is the only place a ROM's
-  // contents should be set up. (See the lab manual for why.)
-  
+  // Initialize mem[i] = i*i for every i from 0 to DEPTH-1.
+  // Done once in an initial block with a for loop -- ROM contents are
+  // fixed at "power-up" and never written again.
+  initial begin
+    for (i = 0; i < DEPTH; i = i + 1)
+      mem[i] = i * i;
+  end
 
-  // TODO: make dout continuously reflect mem[sel]. This is a combinational
-  // read -- pick the right procedural block and sensitivity list.
-
+  // Make dout continuously reflect mem[sel]. This is a combinational
+  // read, so use always @(*) with a plain (non-clocked, non-edge)
+  // sensitivity list so dout updates any time sel (or mem) changes.
+  always @(*) begin
+    dout = mem[sel];
+  end
 
 endmodule
